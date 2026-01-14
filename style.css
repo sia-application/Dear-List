@@ -204,6 +204,7 @@ body {
 
 .toggle-label {
     font-weight: 500;
+    color: var(--primary-pink);
 }
 
 .toggle-switch {
@@ -523,6 +524,45 @@ body {
     background: var(--success-green);
     color: var(--white);
     border-color: var(--success-green);
+}
+
+/* Sub-tabs for birthday */
+.sub-tab-buttons {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 15px;
+    justify-content: center;
+}
+
+.sub-tab-btn {
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 8px 16px;
+    border: 2px solid var(--accent-lavender);
+    border-radius: 20px;
+    background: var(--white);
+    color: var(--text-dark);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.sub-tab-btn:hover {
+    background: var(--light-pink);
+}
+
+.sub-tab-btn.active {
+    background: var(--accent-lavender);
+    color: var(--white);
+    border-color: var(--accent-lavender);
+}
+
+.sub-tab-panel {
+    display: none;
+}
+
+.sub-tab-panel.active {
+    display: block;
 }
 
 @keyframes fadeIn {

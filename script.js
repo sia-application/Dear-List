@@ -51,6 +51,22 @@ document.addEventListener('DOMContentLoaded', () => {
         hidePassedBtn.textContent = hidePassed ? '経過を表示' : '経過を非表示';
         hidePassedBtn.classList.toggle('active', hidePassed);
     });
+
+    // Sub-tab switching for birthday tabs
+    document.querySelectorAll('.sub-tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const subtabId = btn.dataset.subtab;
+            const parent = btn.closest('.tab-panel');
+
+            // Remove active class from all sub-buttons and panels within this parent
+            parent.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
+            parent.querySelectorAll('.sub-tab-panel').forEach(p => p.classList.remove('active'));
+
+            // Add active class to clicked button and corresponding panel
+            btn.classList.add('active');
+            parent.querySelector(`#${subtabId}`).classList.add('active');
+        });
+    });
 });
 
 function formatDateInput(date) {
@@ -222,12 +238,11 @@ function generateHalfYearMilestones(startDate, today, offset) {
         const remainingMonths = months % 12;
 
         let label = '';
-        if (years === 0) {
-            label = `${months}ヶ月`;
-        } else if (remainingMonths === 0) {
-            label = `${years}年`;
+        const yearValue = months / 12;
+        if (Number.isInteger(yearValue)) {
+            label = `${yearValue}周年`;
         } else {
-            label = `${years}年${remainingMonths}ヶ月`;
+            label = `${yearValue}周年`;
         }
 
         const row = document.createElement('tr');
@@ -245,52 +260,45 @@ function generateHalfYearMilestones(startDate, today, offset) {
 }
 
 function generateBirthdayTable(name1, birthday1, name2, birthday2, today, startDate) {
-    const tbody = document.querySelector('#tableBirthday tbody');
-    tbody.innerHTML = '';
+    // Update sub-tab buttons and titles with names
+    const subTabBtns = document.querySelectorAll('#tabBirthday .sub-tab-btn');
+    subTabBtns[0].textContent = name1;
+    subTabBtns[1].textContent = name2;
+    document.getElementById('birthday1Title').textContent = `${name1}の誕生日`;
+    document.getElementById('birthday2Title').textContent = `${name2}の誕生日`;
 
     const people = [
-        { name: name1, birthday: birthday1 },
-        { name: name2, birthday: birthday2 }
+        { name: name1, birthday: birthday1, tableId: 'tableBirthday1' },
+        { name: name2, birthday: birthday2, tableId: 'tableBirthday2' }
     ];
 
     // Generate birthdays from start date year to 10 years in the future
     const startYear = startDate.getFullYear();
     const endYear = today.getFullYear() + 10;
 
-    const allBirthdays = [];
-
     people.forEach(person => {
+        const tbody = document.querySelector(`#${person.tableId} tbody`);
+        tbody.innerHTML = '';
+
         for (let year = startYear; year <= endYear; year++) {
             const birthdayThisYear = new Date(year, person.birthday.getMonth(), person.birthday.getDate());
             // Only include birthdays from start date onwards
             if (birthdayThisYear >= startDate) {
                 const age = year - person.birthday.getFullYear();
-                allBirthdays.push({
-                    name: person.name,
-                    date: birthdayThisYear,
-                    age: age,
-                    originalBirthday: person.birthday
-                });
+                const daysUntil = getDaysDifference(today, birthdayThisYear);
+                const isPassed = birthdayThisYear < today;
+
+                const row = document.createElement('tr');
+                if (isPassed) row.classList.add('row-passed');
+                row.innerHTML = `
+                    <td><strong>${age}歳</strong></td>
+                    <td>${formatDateDisplay(birthdayThisYear)}</td>
+                    <td>${getDayOfWeek(birthdayThisYear)}</td>
+                    <td>${getBirthdayBadge(daysUntil, isPassed)}</td>
+                `;
+                tbody.appendChild(row);
             }
         }
-    });
-
-    // Sort by date
-    allBirthdays.sort((a, b) => a.date - b.date);
-
-    allBirthdays.forEach(birthday => {
-        const daysUntil = getDaysDifference(today, birthday.date);
-        const isPassed = birthday.date < today;
-
-        const row = document.createElement('tr');
-        if (isPassed) row.classList.add('row-passed');
-        row.innerHTML = `
-            <td><strong>${birthday.name}</strong></td>
-            <td>${birthday.age}歳</td>
-            <td>${formatDateDisplay(birthday.date)}</td>
-            <td>${getBirthdayBadge(daysUntil, isPassed)}</td>
-        `;
-        tbody.appendChild(row);
     });
 }
 

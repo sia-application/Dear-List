@@ -35,7 +35,7 @@
                     <input type="date" id="startDate" value="2020-04-30" required>
                 </div>
                 <div class="count-mode-toggle">
-                    <span class="toggle-label">記念日当日</span>
+                    <span class="toggle-label">記念日当日は</span>
                     <div class="toggle-switch">
                         <input type="checkbox" id="countMode" checked>
                         <label for="countMode">
@@ -102,14 +102,14 @@
                 <div class="tab-panels">
                     <div class="tab-panel active" id="tab100">
                         <div class="table-container">
-                            <h3>100日単位記念日</h3>
+                            <h3>100日倍数記念日</h3>
                             <table id="table100">
                                 <thead>
                                     <tr>
                                         <th>日数</th>
                                         <th>日付</th>
                                         <th>曜日</th>
-                                        <th>状態</th>
+                                        <th>記念日まで</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -126,7 +126,7 @@
                                         <th>日数</th>
                                         <th>日付</th>
                                         <th>曜日</th>
-                                        <th>状態</th>
+                                        <th>記念日まで</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -140,10 +140,10 @@
                             <table id="tableHalfYear">
                                 <thead>
                                     <tr>
-                                        <th>期間</th>
+                                        <th>周年</th>
                                         <th>日付</th>
                                         <th>曜日</th>
-                                        <th>状態</th>
+                                        <th>記念日まで</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -152,19 +152,43 @@
                     </div>
 
                     <div class="tab-panel" id="tabBirthday">
-                        <div class="table-container birthday-table">
-                            <h3>ふたりの誕生日</h3>
-                            <table id="tableBirthday">
-                                <thead>
-                                    <tr>
-                                        <th>お名前</th>
-                                        <th>誕生日</th>
-                                        <th>次の誕生日</th>
-                                        <th>あと何日</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
+                        <div class="sub-tab-buttons" id="birthdaySubTabs">
+                            <button class="sub-tab-btn active" data-subtab="birthday1">けい</button>
+                            <button class="sub-tab-btn" data-subtab="birthday2">とも</button>
+                        </div>
+
+                        <div class="sub-tab-panel active" id="birthday1">
+                            <div class="table-container birthday-table">
+                                <h3 id="birthday1Title">けいの誕生日</h3>
+                                <table id="tableBirthday1">
+                                    <thead>
+                                        <tr>
+                                            <th>年齢</th>
+                                            <th>誕生日</th>
+                                            <th>曜日</th>
+                                            <th>記念日まで</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="sub-tab-panel" id="birthday2">
+                            <div class="table-container birthday-table">
+                                <h3 id="birthday2Title">ともの誕生日</h3>
+                                <table id="tableBirthday2">
+                                    <thead>
+                                        <tr>
+                                            <th>年齢</th>
+                                            <th>日付</th>
+                                            <th>曜日</th>
+                                            <th>記念日まで</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
