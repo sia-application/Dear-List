@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,8 +8,10 @@
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700&display=swap"
+        rel="stylesheet">
 </head>
+
 <body>
     <div class="container">
         <!-- Floating hearts decoration -->
@@ -78,65 +81,82 @@
                 <p class="counter-suffix">日目</p>
             </div>
 
-            <div class="milestone-tables">
-                <div class="table-container">
-                    <h3>💯 100日単位の記念日</h3>
-                    <table id="table100">
-                        <thead>
-                            <tr>
-                                <th>日数</th>
-                                <th>日付</th>
-                                <th>曜日</th>
-                                <th>状態</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
+            <div class="milestone-tabs">
+                <div class="tab-buttons">
+                    <button class="tab-btn active" data-tab="tab100">100日</button>
+                    <button class="tab-btn" data-tab="tab111">ゾロ目</button>
+                    <button class="tab-btn" data-tab="tabHalfYear">半年</button>
+                    <button class="tab-btn" data-tab="tabBirthday">誕生日</button>
                 </div>
 
-                <div class="table-container">
-                    <h3>🎰 ゾロ目の記念日</h3>
-                    <table id="table111">
-                        <thead>
-                            <tr>
-                                <th>日数</th>
-                                <th>日付</th>
-                                <th>曜日</th>
-                                <th>状態</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
+                <div class="tab-panels">
+                    <div class="tab-panel active" id="tab100">
+                        <div class="table-container">
+                            <h3>💯 100日単位の記念日</h3>
+                            <table id="table100">
+                                <thead>
+                                    <tr>
+                                        <th>日数</th>
+                                        <th>日付</th>
+                                        <th>曜日</th>
+                                        <th>状態</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
 
-                <div class="table-container">
-                    <h3>📆 半年単位の記念日</h3>
-                    <table id="tableHalfYear">
-                        <thead>
-                            <tr>
-                                <th>期間</th>
-                                <th>日付</th>
-                                <th>曜日</th>
-                                <th>状態</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
+                    <div class="tab-panel" id="tab111">
+                        <div class="table-container">
+                            <h3>🎰 ゾロ目の記念日</h3>
+                            <table id="table111">
+                                <thead>
+                                    <tr>
+                                        <th>日数</th>
+                                        <th>日付</th>
+                                        <th>曜日</th>
+                                        <th>状態</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
 
-                <div class="table-container birthday-table">
-                    <h3>🎂 ふたりの誕生日</h3>
-                    <table id="tableBirthday">
-                        <thead>
-                            <tr>
-                                <th>お名前</th>
-                                <th>誕生日</th>
-                                <th>次の誕生日</th>
-                                <th>あと何日</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
+                    <div class="tab-panel" id="tabHalfYear">
+                        <div class="table-container">
+                            <h3>📆 半年単位の記念日</h3>
+                            <table id="tableHalfYear">
+                                <thead>
+                                    <tr>
+                                        <th>期間</th>
+                                        <th>日付</th>
+                                        <th>曜日</th>
+                                        <th>状態</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="tab-panel" id="tabBirthday">
+                        <div class="table-container birthday-table">
+                            <h3>🎂 ふたりの誕生日</h3>
+                            <table id="tableBirthday">
+                                <thead>
+                                    <tr>
+                                        <th>お名前</th>
+                                        <th>誕生日</th>
+                                        <th>次の誕生日</th>
+                                        <th>あと何日</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -148,4 +168,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>
