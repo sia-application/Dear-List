@@ -189,6 +189,59 @@ body {
 .date-input-group input[type="date"]:focus {
     outline: none;
     border-color: var(--primary-pink);
+}
+
+/* Count Mode Toggle */
+.count-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
+.toggle-label {
+    font-weight: 500;
+}
+
+.toggle-switch {
+    position: relative;
+}
+
+.toggle-switch input[type="checkbox"] {
+    display: none;
+}
+
+.toggle-switch label {
+    display: flex;
+    background: var(--light-pink);
+    border-radius: 20px;
+    padding: 4px;
+    cursor: pointer;
+    border: 2px solid var(--secondary-pink);
+}
+
+.toggle-option {
+    padding: 6px 14px;
+    border-radius: 16px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    color: var(--text-light);
+}
+
+/* Checked = 0日 selected */
+.toggle-switch input[type="checkbox"]:checked+label .toggle-option[data-value="0"] {
+    background: var(--gradient-romantic);
+    color: var(--white);
+}
+
+/* Unchecked = 1日 selected */
+.toggle-switch input[type="checkbox"]:not(:checked)+label .toggle-option[data-value="1"] {
+    background: var(--gradient-romantic);
+    color: var(--white);
     box-shadow: 0 0 15px rgba(255, 107, 157, 0.3);
 }
 

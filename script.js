@@ -39,7 +39,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Hide passed toggle functionality
     const hidePassedBtn = document.getElementById('hidePassedBtn');
-    let hidePassed = false;
+    let hidePassed = true; // Start with passed rows hidden
+    hidePassedBtn.textContent = '経過を表示';
+    hidePassedBtn.classList.add('active');
 
     hidePassedBtn.addEventListener('click', () => {
         hidePassed = !hidePassed;
@@ -130,18 +132,22 @@ function calculateMilestones() {
     const birthday1 = new Date(birthday1Input);
     const birthday2 = new Date(birthday2Input);
 
+    // Get count mode (checked = 0-based, unchecked = 1-based)
+    const isZeroBased = document.getElementById('countMode').checked;
+    const offset = isZeroBased ? 0 : 1;
+
     // Calculate total days
-    const totalDays = getDaysDifference(startDate, today); // Day 0 is the start date
+    const totalDays = getDaysDifference(startDate, today) + offset;
     document.getElementById('totalDays').textContent = totalDays.toLocaleString();
 
     // Generate 100-day milestones
-    generate100DayMilestones(startDate, today);
+    generate100DayMilestones(startDate, today, offset);
 
     // Generate 111-day (repdigit) milestones
-    generate111Milestones(startDate, today);
+    generate111Milestones(startDate, today, offset);
 
     // Generate half-year milestones
-    generateHalfYearMilestones(startDate, today);
+    generateHalfYearMilestones(startDate, today, offset);
 
     // Generate birthday table
     generateBirthdayTable(name1, birthday1, name2, birthday2, today, startDate);
@@ -149,16 +155,23 @@ function calculateMilestones() {
     // Show result section with animation
     const resultSection = document.getElementById('resultSection');
     resultSection.style.display = 'block';
+
+    // Apply hide passed state
+    const hidePassed = document.getElementById('hidePassedBtn').classList.contains('active');
+    document.querySelectorAll('.row-passed').forEach(row => {
+        row.style.display = hidePassed ? 'none' : '';
+    });
+
     resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-function generate100DayMilestones(startDate, today) {
+function generate100DayMilestones(startDate, today, offset) {
     const tbody = document.querySelector('#table100 tbody');
     tbody.innerHTML = '';
 
     // Generate milestones from 100 to 3000 days
     for (let days = 100; days <= 3000; days += 100) {
-        const targetDate = addDays(startDate, days); // Day 0 is the start date
+        const targetDate = addDays(startDate, days - offset);
         const row = document.createElement('tr');
         const isPassed = targetDate < today;
         if (isPassed) row.classList.add('row-passed');
@@ -172,7 +185,7 @@ function generate100DayMilestones(startDate, today) {
     }
 }
 
-function generate111Milestones(startDate, today) {
+function generate111Milestones(startDate, today, offset) {
     const tbody = document.querySelector('#table111 tbody');
     tbody.innerHTML = '';
 
@@ -183,7 +196,7 @@ function generate111Milestones(startDate, today) {
     ];
 
     repdigits.forEach(days => {
-        const targetDate = addDays(startDate, days);
+        const targetDate = addDays(startDate, days - offset);
         const row = document.createElement('tr');
         const isPassed = targetDate < today;
         if (isPassed) row.classList.add('row-passed');
@@ -197,11 +210,12 @@ function generate111Milestones(startDate, today) {
     });
 }
 
-function generateHalfYearMilestones(startDate, today) {
+function generateHalfYearMilestones(startDate, today, offset) {
     const tbody = document.querySelector('#tableHalfYear tbody');
     tbody.innerHTML = '';
 
     // Generate half-year milestones (6 months, 1 year, 1.5 years, ...)
+    // Note: offset doesn't apply to month-based milestones
     for (let months = 6; months <= 120; months += 6) { // Up to 10 years
         const targetDate = addMonths(startDate, months);
         const years = Math.floor(months / 12);
