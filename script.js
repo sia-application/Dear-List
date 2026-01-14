@@ -268,8 +268,8 @@ function generateBirthdayTable(name1, birthday1, name2, birthday2, today, startD
     document.getElementById('birthday2Title').textContent = `${name2}の誕生日`;
 
     const people = [
-        { name: name1, birthday: birthday1, tableId: 'tableBirthday1' },
-        { name: name2, birthday: birthday2, tableId: 'tableBirthday2' }
+        { name: name1, birthday: birthday1, tableId: 'tableBirthday1', isFemale: false },
+        { name: name2, birthday: birthday2, tableId: 'tableBirthday2', isFemale: true }
     ];
 
     // Generate birthdays from start date year to 10 years in the future
@@ -290,14 +290,46 @@ function generateBirthdayTable(name1, birthday1, name2, birthday2, today, startD
 
                 const row = document.createElement('tr');
                 if (isPassed) row.classList.add('row-passed');
+
+                // For female, show 17歳 by default with click to reveal real age
+                let ageCell;
+                if (person.isFemale) {
+                    ageCell = `<td class="age-cell" data-real-age="${age}" data-showing-real="false"><strong>17歳</strong></td>`;
+                } else {
+                    ageCell = `<td><strong>${age}歳</strong></td>`;
+                }
+
                 row.innerHTML = `
-                    <td><strong>${age}歳</strong></td>
+                    ${ageCell}
                     <td>${formatDateDisplay(birthdayThisYear)}</td>
                     <td>${getDayOfWeek(birthdayThisYear)}</td>
                     <td>${getBirthdayBadge(daysUntil, isPassed)}</td>
                 `;
                 tbody.appendChild(row);
             }
+        }
+
+        // Add header click to toggle all cells at once
+        if (person.isFemale) {
+
+            // Add header click to toggle all cells at once
+            const ageHeader = document.getElementById('birthday2AgeHeader');
+            ageHeader.addEventListener('click', () => {
+                const cells = tbody.querySelectorAll('.age-cell');
+                // Check if any are showing fake age, if so show all real
+                const anyShowingFake = Array.from(cells).some(cell => cell.dataset.showingReal === 'false');
+
+                cells.forEach(cell => {
+                    const realAge = cell.dataset.realAge;
+                    if (anyShowingFake) {
+                        cell.innerHTML = `<strong>${realAge}歳</strong>`;
+                        cell.dataset.showingReal = 'true';
+                    } else {
+                        cell.innerHTML = `<strong>17歳</strong>`;
+                        cell.dataset.showingReal = 'false';
+                    }
+                });
+            });
         }
     });
 }

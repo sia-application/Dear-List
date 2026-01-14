@@ -565,6 +565,26 @@ body {
     display: block;
 }
 
+/* Clickable age cell */
+.age-cell.clickable {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.age-cell.clickable:hover {
+    background: var(--light-pink);
+}
+
+/* Clickable header */
+.clickable-header {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.clickable-header:hover {
+    opacity: 0.8;
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;
