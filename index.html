@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dear List - ふたりの記念日カレンダー</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Floating hearts decoration -->
+        <div class="floating-hearts">
+            <span class="heart">💕</span>
+            <span class="heart">💗</span>
+            <span class="heart">💖</span>
+            <span class="heart">💝</span>
+            <span class="heart">💕</span>
+        </div>
+
+        <header class="app-header">
+            <h1>💑 Dear List</h1>
+            <p class="subtitle">ふたりの大切な記念日をカウント</p>
+        </header>
+
+        <section class="input-section">
+            <div class="input-card">
+                <h2>📅 記念日を入力</h2>
+                <div class="date-input-group">
+                    <label for="startDate">ふたりの記念日</label>
+                    <input type="date" id="startDate" required>
+                </div>
+            </div>
+
+            <div class="couple-cards">
+                <div class="person-card person-1">
+                    <div class="person-icon">🧑</div>
+                    <h3>パートナー1</h3>
+                    <div class="input-group">
+                        <label for="name1">お名前</label>
+                        <input type="text" id="name1" placeholder="例: たろう" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="birthday1">誕生日</label>
+                        <input type="date" id="birthday1" required>
+                    </div>
+                </div>
+
+                <div class="heart-connector">💕</div>
+
+                <div class="person-card person-2">
+                    <div class="person-icon">👩</div>
+                    <h3>パートナー2</h3>
+                    <div class="input-group">
+                        <label for="name2">お名前</label>
+                        <input type="text" id="name2" placeholder="例: はなこ" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="birthday2">誕生日</label>
+                        <input type="date" id="birthday2" required>
+                    </div>
+                </div>
+            </div>
+
+            <button class="calculate-btn" id="calculateBtn">
+                <span class="btn-icon">✨</span>
+                記念日を計算する
+                <span class="btn-icon">✨</span>
+            </button>
+        </section>
+
+        <section class="result-section" id="resultSection" style="display: none;">
+            <div class="days-counter">
+                <p class="counter-label">今日までの日数</p>
+                <div class="counter-number" id="totalDays">0</div>
+                <p class="counter-suffix">日目</p>
+            </div>
+
+            <div class="milestone-tables">
+                <div class="table-container">
+                    <h3>💯 100日単位の記念日</h3>
+                    <table id="table100">
+                        <thead>
+                            <tr>
+                                <th>日数</th>
+                                <th>日付</th>
+                                <th>曜日</th>
+                                <th>状態</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <div class="table-container">
+                    <h3>🎰 ゾロ目の記念日</h3>
+                    <table id="table111">
+                        <thead>
+                            <tr>
+                                <th>日数</th>
+                                <th>日付</th>
+                                <th>曜日</th>
+                                <th>状態</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <div class="table-container">
+                    <h3>📆 半年単位の記念日</h3>
+                    <table id="tableHalfYear">
+                        <thead>
+                            <tr>
+                                <th>期間</th>
+                                <th>日付</th>
+                                <th>曜日</th>
+                                <th>状態</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <div class="table-container birthday-table">
+                    <h3>🎂 ふたりの誕生日</h3>
+                    <table id="tableBirthday">
+                        <thead>
+                            <tr>
+                                <th>お名前</th>
+                                <th>誕生日</th>
+                                <th>次の誕生日</th>
+                                <th>あと何日</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <footer class="app-footer">
+            <p>Made with 💕 for couples</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
