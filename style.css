@@ -761,10 +761,20 @@ tbody tr:last-child td {
 @media (max-width: 480px) {
     .container {
         padding: 10px;
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
     }
 
     .app-header h1 {
         font-size: 1.6rem;
+    }
+
+    .app-header {
+        padding: 25px 15px;
+    }
+
+    .subtitle {
+        font-size: 0.9rem;
     }
 
     .input-card,
@@ -772,17 +782,156 @@ tbody tr:last-child td {
         padding: 20px 15px;
     }
 
-    .calculate-btn {
-        padding: 15px 30px;
+    .input-card h2 {
+        font-size: 1.2rem;
+    }
+
+    .date-input-group input[type="date"] {
+        font-size: 1rem;
+        padding: 12px 20px;
+    }
+
+    .count-mode-toggle {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .toggle-label {
+        font-size: 0.85rem;
+    }
+
+    .toggle-option {
+        padding: 5px 12px;
+        font-size: 0.8rem;
+    }
+
+    .person-icon {
+        font-size: 2.5rem;
+    }
+
+    .person-card h3 {
         font-size: 1rem;
     }
 
+    .input-group label {
+        font-size: 0.85rem;
+    }
+
+    .input-group input {
+        font-size: 0.95rem;
+        padding: 10px 12px;
+    }
+
+    .calculate-btn {
+        padding: 15px 25px;
+        font-size: 1rem;
+    }
+
+    .btn-icon {
+        font-size: 1.1rem;
+    }
+
     .days-counter {
-        padding: 30px 20px;
+        padding: 25px 15px;
     }
 
     .counter-number {
-        font-size: 2.8rem;
+        font-size: 2.5rem;
+    }
+
+    .counter-label,
+    .counter-suffix {
+        font-size: 0.9rem;
+    }
+
+    /* Tab buttons for mobile */
+    .tab-buttons {
+        gap: 5px;
+    }
+
+    .tab-btn {
+        font-size: 0.8rem;
+        padding: 10px 14px;
+    }
+
+    .hide-passed-btn {
+        font-size: 0.8rem;
+        padding: 6px 16px;
+    }
+
+    .sub-tab-buttons {
+        gap: 5px;
+    }
+
+    .sub-tab-btn {
+        font-size: 0.8rem;
+        padding: 6px 12px;
+    }
+
+    .milestone-tabs {
+        padding: 15px;
+    }
+
+    /* Table optimizations for iPhone */
+    .table-container {
+        padding: 12px;
+    }
+
+    .table-container h3 {
+        font-size: 1rem;
+        margin-bottom: 12px;
+        padding-bottom: 8px;
+    }
+
+    table {
+        font-size: 0.8rem;
+    }
+
+    th {
+        padding: 10px 6px;
+        font-size: 0.75rem;
+    }
+
+    td {
+        padding: 10px 6px;
+        font-size: 0.8rem;
+    }
+
+    .status-badge {
+        padding: 4px 10px;
+        font-size: 0.7rem;
+    }
+
+    .app-footer {
+        padding: 25px 15px;
+        font-size: 0.8rem;
+    }
+}
+
+/* Extra small devices (iPhone SE, etc.) */
+@media (max-width: 375px) {
+    .app-header h1 {
+        font-size: 1.4rem;
+    }
+
+    .counter-number {
+        font-size: 2.2rem;
+    }
+
+    .tab-btn {
+        font-size: 0.75rem;
+        padding: 8px 10px;
+    }
+
+    th,
+    td {
+        padding: 8px 4px;
+        font-size: 0.75rem;
+    }
+
+    .status-badge {
+        padding: 3px 8px;
+        font-size: 0.65rem;
     }
 }
 
