@@ -254,6 +254,8 @@ body {
     gap: 20px;
     margin-bottom: 30px;
     flex-wrap: wrap;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .person-card {
@@ -264,9 +266,11 @@ body {
     flex: 1;
     min-width: 250px;
     max-width: 350px;
+    width: 100%;
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     overflow: hidden;
+    box-sizing: border-box;
 }
 
 .person-card:hover {
@@ -830,6 +834,14 @@ tbody tr:last-child td {
     .person-card {
         min-width: unset;
         width: 100%;
+        max-width: 100%;
+        padding: 20px 15px;
+        margin: 0;
+    }
+
+    .couple-cards {
+        gap: 15px;
+        padding: 0;
     }
 
     .calculate-btn {
