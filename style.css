@@ -317,6 +317,8 @@ body {
 .input-group {
     margin-bottom: 15px;
     text-align: left;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .input-group label {
@@ -328,9 +330,9 @@ body {
 }
 
 .input-group input {
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
     font-family: inherit;
     font-size: 1rem;
     padding: 12px 15px;
@@ -339,6 +341,14 @@ body {
     background: var(--cream);
     color: var(--text-dark);
     transition: all 0.3s ease;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.input-group input[type="date"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
 }
 
 .input-group input:focus {
@@ -842,6 +852,24 @@ tbody tr:last-child td {
     .couple-cards {
         gap: 15px;
         padding: 0;
+        width: 100%;
+    }
+
+    .input-group {
+        width: 100%;
+        max-width: 100%;
+        overflow: hidden;
+    }
+
+    .input-group input,
+    .input-group input[type="text"],
+    .input-group input[type="date"] {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+        font-size: 16px !important;
+        /* Prevents iOS zoom */
     }
 
     .calculate-btn {
