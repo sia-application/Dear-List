@@ -446,6 +446,32 @@ body {
     display: block;
 }
 
+/* Hide passed button */
+.hide-passed-btn {
+    display: block;
+    margin: 0 auto 20px;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 8px 20px;
+    border: 2px solid var(--secondary-pink);
+    border-radius: 20px;
+    background: var(--white);
+    color: var(--text-dark);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.hide-passed-btn:hover {
+    background: var(--light-pink);
+}
+
+.hide-passed-btn.active {
+    background: var(--success-green);
+    color: var(--white);
+    border-color: var(--success-green);
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;

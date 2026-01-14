@@ -30,9 +30,8 @@
 
         <section class="input-section">
             <div class="input-card">
-                <h2>📅 記念日を入力</h2>
+                <h2>ふたりの記念日</h2>
                 <div class="date-input-group">
-                    <label for="startDate">ふたりの記念日</label>
                     <input type="date" id="startDate" value="2020-04-30" required>
                 </div>
             </div>
@@ -85,9 +84,10 @@
                 <div class="tab-buttons">
                     <button class="tab-btn active" data-tab="tab100">100日</button>
                     <button class="tab-btn" data-tab="tab111">ゾロ目</button>
-                    <button class="tab-btn" data-tab="tabHalfYear">半年</button>
+                    <button class="tab-btn" data-tab="tabHalfYear">周年</button>
                     <button class="tab-btn" data-tab="tabBirthday">誕生日</button>
                 </div>
+                <button class="hide-passed-btn" id="hidePassedBtn">経過を非表示</button>
 
                 <div class="tab-panels">
                     <div class="tab-panel active" id="tab100">

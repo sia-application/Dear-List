@@ -36,6 +36,19 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById(tabId).classList.add('active');
         });
     });
+
+    // Hide passed toggle functionality
+    const hidePassedBtn = document.getElementById('hidePassedBtn');
+    let hidePassed = false;
+
+    hidePassedBtn.addEventListener('click', () => {
+        hidePassed = !hidePassed;
+        document.querySelectorAll('.row-passed').forEach(row => {
+            row.style.display = hidePassed ? 'none' : '';
+        });
+        hidePassedBtn.textContent = hidePassed ? '経過を表示' : '経過を非表示';
+        hidePassedBtn.classList.toggle('active', hidePassed);
+    });
 });
 
 function formatDateInput(date) {
@@ -118,7 +131,7 @@ function calculateMilestones() {
     const birthday2 = new Date(birthday2Input);
 
     // Calculate total days
-    const totalDays = getDaysDifference(startDate, today) + 1; // +1 to include start day
+    const totalDays = getDaysDifference(startDate, today); // Day 0 is the start date
     document.getElementById('totalDays').textContent = totalDays.toLocaleString();
 
     // Generate 100-day milestones
@@ -131,7 +144,7 @@ function calculateMilestones() {
     generateHalfYearMilestones(startDate, today);
 
     // Generate birthday table
-    generateBirthdayTable(name1, birthday1, name2, birthday2, today);
+    generateBirthdayTable(name1, birthday1, name2, birthday2, today, startDate);
 
     // Show result section with animation
     const resultSection = document.getElementById('resultSection');
@@ -144,27 +157,19 @@ function generate100DayMilestones(startDate, today) {
     tbody.innerHTML = '';
 
     // Generate milestones from 100 to 3000 days
-    const milestones = [];
     for (let days = 100; days <= 3000; days += 100) {
-        const targetDate = addDays(startDate, days - 1); // -1 because day 1 is the start date
-        milestones.push({ days, date: targetDate });
-    }
-
-    // Filter to show past 3 and future 10
-    const pastMilestones = milestones.filter(m => m.date < today).slice(-3);
-    const futureMilestones = milestones.filter(m => m.date >= today).slice(0, 10);
-    const displayMilestones = [...pastMilestones, ...futureMilestones];
-
-    displayMilestones.forEach(milestone => {
+        const targetDate = addDays(startDate, days); // Day 0 is the start date
         const row = document.createElement('tr');
+        const isPassed = targetDate < today;
+        if (isPassed) row.classList.add('row-passed');
         row.innerHTML = `
-            <td><strong>${milestone.days}日目</strong></td>
-            <td>${formatDateDisplay(milestone.date)}</td>
-            <td>${getDayOfWeek(milestone.date)}</td>
-            <td>${getStatusBadge(milestone.date, today)}</td>
+            <td><strong>${days}日目</strong></td>
+            <td>${formatDateDisplay(targetDate)}</td>
+            <td>${getDayOfWeek(targetDate)}</td>
+            <td>${getStatusBadge(targetDate, today)}</td>
         `;
         tbody.appendChild(row);
-    });
+    }
 }
 
 function generate111Milestones(startDate, today) {
@@ -177,23 +182,16 @@ function generate111Milestones(startDate, today) {
         1111, 2222, 3333
     ];
 
-    const milestones = repdigits.map(days => ({
-        days,
-        date: addDays(startDate, days - 1)
-    }));
-
-    // Filter to show past 3 and future 8
-    const pastMilestones = milestones.filter(m => m.date < today).slice(-3);
-    const futureMilestones = milestones.filter(m => m.date >= today).slice(0, 8);
-    const displayMilestones = [...pastMilestones, ...futureMilestones];
-
-    displayMilestones.forEach(milestone => {
+    repdigits.forEach(days => {
+        const targetDate = addDays(startDate, days);
         const row = document.createElement('tr');
+        const isPassed = targetDate < today;
+        if (isPassed) row.classList.add('row-passed');
         row.innerHTML = `
-            <td><strong>${milestone.days}日目</strong> ✨</td>
-            <td>${formatDateDisplay(milestone.date)}</td>
-            <td>${getDayOfWeek(milestone.date)}</td>
-            <td>${getStatusBadge(milestone.date, today)}</td>
+            <td><strong>${days}日目</strong> ✨</td>
+            <td>${formatDateDisplay(targetDate)}</td>
+            <td>${getDayOfWeek(targetDate)}</td>
+            <td>${getStatusBadge(targetDate, today)}</td>
         `;
         tbody.appendChild(row);
     });
@@ -204,7 +202,6 @@ function generateHalfYearMilestones(startDate, today) {
     tbody.innerHTML = '';
 
     // Generate half-year milestones (6 months, 1 year, 1.5 years, ...)
-    const milestones = [];
     for (let months = 6; months <= 120; months += 6) { // Up to 10 years
         const targetDate = addMonths(startDate, months);
         const years = Math.floor(months / 12);
@@ -219,28 +216,21 @@ function generateHalfYearMilestones(startDate, today) {
             label = `${years}年${remainingMonths}ヶ月`;
         }
 
-        milestones.push({ months, label, date: targetDate });
-    }
-
-    // Filter to show past 3 and future 10
-    const pastMilestones = milestones.filter(m => m.date < today).slice(-3);
-    const futureMilestones = milestones.filter(m => m.date >= today).slice(0, 10);
-    const displayMilestones = [...pastMilestones, ...futureMilestones];
-
-    displayMilestones.forEach(milestone => {
         const row = document.createElement('tr');
-        const icon = milestone.months % 12 === 0 ? ' 🎊' : '';
+        const isPassed = targetDate < today;
+        if (isPassed) row.classList.add('row-passed');
+        const icon = months % 12 === 0 ? ' 🎊' : '';
         row.innerHTML = `
-            <td><strong>${milestone.label}</strong>${icon}</td>
-            <td>${formatDateDisplay(milestone.date)}</td>
-            <td>${getDayOfWeek(milestone.date)}</td>
-            <td>${getStatusBadge(milestone.date, today)}</td>
+            <td><strong>${label}</strong>${icon}</td>
+            <td>${formatDateDisplay(targetDate)}</td>
+            <td>${getDayOfWeek(targetDate)}</td>
+            <td>${getStatusBadge(targetDate, today)}</td>
         `;
         tbody.appendChild(row);
-    });
+    }
 }
 
-function generateBirthdayTable(name1, birthday1, name2, birthday2, today) {
+function generateBirthdayTable(name1, birthday1, name2, birthday2, today, startDate) {
     const tbody = document.querySelector('#tableBirthday tbody');
     tbody.innerHTML = '';
 
@@ -249,33 +239,51 @@ function generateBirthdayTable(name1, birthday1, name2, birthday2, today) {
         { name: name2, birthday: birthday2 }
     ];
 
+    // Generate birthdays from start date year to 10 years in the future
+    const startYear = startDate.getFullYear();
+    const endYear = today.getFullYear() + 10;
+
+    const allBirthdays = [];
+
     people.forEach(person => {
-        // Calculate next birthday
-        let nextBirthday = new Date(today.getFullYear(), person.birthday.getMonth(), person.birthday.getDate());
-
-        // If birthday has passed this year, use next year
-        if (nextBirthday < today) {
-            nextBirthday = new Date(today.getFullYear() + 1, person.birthday.getMonth(), person.birthday.getDate());
+        for (let year = startYear; year <= endYear; year++) {
+            const birthdayThisYear = new Date(year, person.birthday.getMonth(), person.birthday.getDate());
+            // Only include birthdays from start date onwards
+            if (birthdayThisYear >= startDate) {
+                const age = year - person.birthday.getFullYear();
+                allBirthdays.push({
+                    name: person.name,
+                    date: birthdayThisYear,
+                    age: age,
+                    originalBirthday: person.birthday
+                });
+            }
         }
+    });
 
-        const daysUntil = getDaysDifference(today, nextBirthday);
+    // Sort by date
+    allBirthdays.sort((a, b) => a.date - b.date);
 
-        // Calculate age on next birthday
-        const nextAge = nextBirthday.getFullYear() - person.birthday.getFullYear();
+    allBirthdays.forEach(birthday => {
+        const daysUntil = getDaysDifference(today, birthday.date);
+        const isPassed = birthday.date < today;
 
         const row = document.createElement('tr');
+        if (isPassed) row.classList.add('row-passed');
         row.innerHTML = `
-            <td><strong>${person.name}</strong> 💕</td>
-            <td>${person.birthday.getMonth() + 1}月${person.birthday.getDate()}日</td>
-            <td>${formatDateDisplay(nextBirthday)}<br><small>(${nextAge}歳)</small></td>
-            <td>${getBirthdayBadge(daysUntil)}</td>
+            <td><strong>${birthday.name}</strong></td>
+            <td>${birthday.age}歳</td>
+            <td>${formatDateDisplay(birthday.date)}</td>
+            <td>${getBirthdayBadge(daysUntil, isPassed)}</td>
         `;
         tbody.appendChild(row);
     });
 }
 
-function getBirthdayBadge(daysUntil) {
-    if (daysUntil === 0) {
+function getBirthdayBadge(daysUntil, isPassed) {
+    if (isPassed) {
+        return `<span class="status-badge status-passed">✓ 経過</span>`;
+    } else if (daysUntil === 0) {
         return `<span class="status-badge status-today">🎂 今日!</span>`;
     } else if (daysUntil <= 7) {
         return `<span class="status-badge status-soon">あと${daysUntil}日 🎁</span>`;
