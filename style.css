@@ -266,6 +266,7 @@ body {
     max-width: 350px;
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
 }
 
 .person-card:hover {
@@ -324,6 +325,8 @@ body {
 
 .input-group input {
     width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
     font-family: inherit;
     font-size: 1rem;
     padding: 12px 15px;
@@ -820,6 +823,13 @@ tbody tr:last-child td {
     .input-group input {
         font-size: 0.95rem;
         padding: 10px 12px;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .person-card {
+        min-width: unset;
+        width: 100%;
     }
 
     .calculate-btn {
