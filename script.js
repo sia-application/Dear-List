@@ -109,11 +109,12 @@ function getStatusBadge(targetDate, today) {
     const diff = getDaysDifference(today, targetDate);
 
     if (diff < 0) {
-        return `<span class="status-badge status-passed">✓ 経過</span>`;
+        const passedDays = Math.abs(diff);
+        return `<span class="status-badge status-passed">${passedDays}日経過</span>`;
     } else if (diff === 0) {
-        return `<span class="status-badge status-today">🎉 今日!</span>`;
+        return `<span class="status-badge status-today">記念日</span>`;
     } else if (diff <= 30) {
-        return `<span class="status-badge status-soon">あと${diff}日 💕</span>`;
+        return `<span class="status-badge status-soon">あと${diff}日</span>`;
     } else {
         return `<span class="status-badge status-upcoming">あと${diff}日</span>`;
     }
@@ -217,7 +218,7 @@ function generate111Milestones(startDate, today, offset) {
         const isPassed = targetDate < today;
         if (isPassed) row.classList.add('row-passed');
         row.innerHTML = `
-            <td><strong>${days}日目</strong> ✨</td>
+            <td><strong>${days}日目</strong></td>
             <td>${formatDateDisplay(targetDate)}</td>
             <td>${getDayOfWeek(targetDate)}</td>
             <td>${getStatusBadge(targetDate, today)}</td>
@@ -248,9 +249,8 @@ function generateHalfYearMilestones(startDate, today, offset) {
         const row = document.createElement('tr');
         const isPassed = targetDate < today;
         if (isPassed) row.classList.add('row-passed');
-        const icon = months % 12 === 0 ? ' 🎊' : '';
         row.innerHTML = `
-            <td><strong>${label}</strong>${icon}</td>
+            <td><strong>${label}</strong></td>
             <td>${formatDateDisplay(targetDate)}</td>
             <td>${getDayOfWeek(targetDate)}</td>
             <td>${getStatusBadge(targetDate, today)}</td>
@@ -336,11 +336,12 @@ function generateBirthdayTable(name1, birthday1, name2, birthday2, today, startD
 
 function getBirthdayBadge(daysUntil, isPassed) {
     if (isPassed) {
-        return `<span class="status-badge status-passed">✓ 経過</span>`;
+        const passedDays = Math.abs(daysUntil);
+        return `<span class="status-badge status-passed">${passedDays}日経過</span>`;
     } else if (daysUntil === 0) {
-        return `<span class="status-badge status-today">🎂 今日!</span>`;
+        return `<span class="status-badge status-today">誕生日</span>`;
     } else if (daysUntil <= 7) {
-        return `<span class="status-badge status-soon">あと${daysUntil}日 🎁</span>`;
+        return `<span class="status-badge status-soon">あと${daysUntil}日</span>`;
     } else if (daysUntil <= 30) {
         return `<span class="status-badge status-soon">あと${daysUntil}日</span>`;
     } else {
