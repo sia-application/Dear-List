@@ -67,6 +67,19 @@ document.addEventListener('DOMContentLoaded', () => {
             parent.querySelector(`#${subtabId}`).classList.add('active');
         });
     });
+
+    // Load more button for 100-day milestones
+    document.getElementById('loadMore100').addEventListener('click', loadMore100DayMilestones);
+
+    // Load more button for 111 (repdigit) milestones
+    document.getElementById('loadMore111').addEventListener('click', loadMore111Milestones);
+
+    // Load more button for half-year milestones
+    document.getElementById('loadMoreHalfYear').addEventListener('click', loadMoreHalfYearMilestones);
+
+    // Load more buttons for birthday tables
+    document.getElementById('loadMoreBirthday1').addEventListener('click', () => loadMoreBirthday('person1'));
+    document.getElementById('loadMoreBirthday2').addEventListener('click', () => loadMoreBirthday('person2'));
 });
 
 function formatDateInput(date) {
@@ -182,9 +195,23 @@ function calculateMilestones() {
     resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
+// Global state for infinite scroll
+let milestone100State = {
+    currentMaxDays: 3000,
+    startDate: null,
+    today: null,
+    offset: 0
+};
+
 function generate100DayMilestones(startDate, today, offset) {
     const tbody = document.querySelector('#table100 tbody');
     tbody.innerHTML = '';
+
+    // Store state for load more
+    milestone100State.startDate = startDate;
+    milestone100State.today = today;
+    milestone100State.offset = offset;
+    milestone100State.currentMaxDays = 3000;
 
     // Generate milestones from 100 to 3000 days
     for (let days = 100; days <= 3000; days += 100) {
@@ -200,23 +227,31 @@ function generate100DayMilestones(startDate, today, offset) {
         `;
         tbody.appendChild(row);
     }
+
+    // Show load more button
+    const loadMoreBtn = document.getElementById('loadMore100');
+    loadMoreBtn.style.display = 'block';
 }
 
-function generate111Milestones(startDate, today, offset) {
-    const tbody = document.querySelector('#table111 tbody');
-    tbody.innerHTML = '';
+function loadMore100DayMilestones() {
+    const tbody = document.querySelector('#table100 tbody');
+    const { startDate, today, offset, currentMaxDays } = milestone100State;
+    const hidePassed = document.getElementById('hidePassedBtn').classList.contains('active');
 
-    // Generate repdigit milestones: 111, 222, 333, ..., 999, 1111, 2222, ...
-    const repdigits = [
-        111, 222, 333, 444, 555, 666, 777, 888, 999,
-        1111, 2222, 3333
-    ];
+    // Load next 10 milestones (10 * 100 = 1000 days)
+    const startDays = currentMaxDays + 100;
+    const endDays = currentMaxDays + 1000;
 
-    repdigits.forEach(days => {
+    for (let days = startDays; days <= endDays; days += 100) {
         const targetDate = addDays(startDate, days - offset);
         const row = document.createElement('tr');
         const isPassed = targetDate < today;
-        if (isPassed) row.classList.add('row-passed');
+        if (isPassed) {
+            row.classList.add('row-passed');
+            if (hidePassed) {
+                row.style.display = 'none';
+            }
+        }
         row.innerHTML = `
             <td><strong>${days}日目</strong></td>
             <td>${formatDateDisplay(targetDate)}</td>
@@ -224,31 +259,172 @@ function generate111Milestones(startDate, today, offset) {
             <td>${getStatusBadge(targetDate, today)}</td>
         `;
         tbody.appendChild(row);
-    });
+    }
+
+    milestone100State.currentMaxDays = endDays;
 }
+
+// Global state for 111 (repdigit) milestones infinite scroll
+let milestone111State = {
+    currentIndex: 0,
+    allRepdigits: [],
+    startDate: null,
+    today: null,
+    offset: 0
+};
+
+// Generate all repdigit numbers (111, 222, ..., 999, 1111, 2222, ..., 9999, 11111, ...)
+function generateAllRepdigits() {
+    const repdigits = [];
+    // Generate for 3 digits to 6 digits (can extend further if needed)
+    for (let digits = 3; digits <= 6; digits++) {
+        for (let d = 1; d <= 9; d++) {
+            repdigits.push(parseInt(String(d).repeat(digits)));
+        }
+    }
+    return repdigits.sort((a, b) => a - b);
+}
+
+function generate111Milestones(startDate, today, offset) {
+    const tbody = document.querySelector('#table111 tbody');
+    tbody.innerHTML = '';
+
+    // Generate all repdigits and store state
+    milestone111State.allRepdigits = generateAllRepdigits();
+    milestone111State.startDate = startDate;
+    milestone111State.today = today;
+    milestone111State.offset = offset;
+    milestone111State.currentIndex = 0;
+
+    // Get hide passed state
+    const hidePassed = document.getElementById('hidePassedBtn').classList.contains('active');
+
+    // Show items until we have 10 visible rows (or run out of items)
+    const targetVisibleCount = 10;
+    let visibleCount = 0;
+    let index = 0;
+
+    while (visibleCount < targetVisibleCount && index < milestone111State.allRepdigits.length) {
+        const days = milestone111State.allRepdigits[index];
+        const targetDate = addDays(startDate, days - offset);
+        const row = document.createElement('tr');
+        const isPassed = targetDate < today;
+
+        if (isPassed) {
+            row.classList.add('row-passed');
+            if (hidePassed) {
+                row.style.display = 'none';
+            } else {
+                visibleCount++;
+            }
+        } else {
+            visibleCount++;
+        }
+
+        row.innerHTML = `
+            <td><strong>${days}日目</strong></td>
+            <td>${formatDateDisplay(targetDate)}</td>
+            <td>${getDayOfWeek(targetDate)}</td>
+            <td>${getStatusBadge(targetDate, today)}</td>
+        `;
+        tbody.appendChild(row);
+        index++;
+    }
+
+    milestone111State.currentIndex = index;
+
+    // Show load more button if there are more items
+    const loadMoreBtn = document.getElementById('loadMore111');
+    loadMoreBtn.style.display = milestone111State.currentIndex < milestone111State.allRepdigits.length ? 'block' : 'none';
+}
+
+function loadMore111Milestones() {
+    const tbody = document.querySelector('#table111 tbody');
+    const { allRepdigits, startDate, today, offset, currentIndex } = milestone111State;
+    const hidePassed = document.getElementById('hidePassedBtn').classList.contains('active');
+
+    // Load items until we have 10 visible rows (or run out of items)
+    const targetVisibleCount = 10;
+    let visibleCount = 0;
+    let index = currentIndex;
+
+    while (visibleCount < targetVisibleCount && index < allRepdigits.length) {
+        const days = allRepdigits[index];
+        const targetDate = addDays(startDate, days - offset);
+        const row = document.createElement('tr');
+        const isPassed = targetDate < today;
+
+        if (isPassed) {
+            row.classList.add('row-passed');
+            if (hidePassed) {
+                row.style.display = 'none';
+            } else {
+                visibleCount++;
+            }
+        } else {
+            visibleCount++;
+        }
+
+        row.innerHTML = `
+            <td><strong>${days}日目</strong></td>
+            <td>${formatDateDisplay(targetDate)}</td>
+            <td>${getDayOfWeek(targetDate)}</td>
+            <td>${getStatusBadge(targetDate, today)}</td>
+        `;
+        tbody.appendChild(row);
+        index++;
+    }
+
+    milestone111State.currentIndex = index;
+
+    // Hide button if no more items
+    const loadMoreBtn = document.getElementById('loadMore111');
+    loadMoreBtn.style.display = milestone111State.currentIndex < allRepdigits.length ? 'block' : 'none';
+}
+
+// Global state for half-year milestones infinite scroll
+let milestoneHalfYearState = {
+    currentMonths: 0,
+    startDate: null,
+    today: null
+};
 
 function generateHalfYearMilestones(startDate, today, offset) {
     const tbody = document.querySelector('#tableHalfYear tbody');
     tbody.innerHTML = '';
 
-    // Generate half-year milestones (6 months, 1 year, 1.5 years, ...)
-    // Note: offset doesn't apply to month-based milestones
-    for (let months = 6; months <= 120; months += 6) { // Up to 10 years
-        const targetDate = addMonths(startDate, months);
-        const years = Math.floor(months / 12);
-        const remainingMonths = months % 12;
+    // Store state for load more
+    milestoneHalfYearState.startDate = startDate;
+    milestoneHalfYearState.today = today;
+    milestoneHalfYearState.currentMonths = 0;
 
-        let label = '';
+    // Get hide passed state
+    const hidePassed = document.getElementById('hidePassedBtn').classList.contains('active');
+
+    // Show items until we have 10 visible rows
+    const targetVisibleCount = 10;
+    let visibleCount = 0;
+    let months = 6;
+
+    while (visibleCount < targetVisibleCount) {
+        const targetDate = addMonths(startDate, months);
         const yearValue = months / 12;
-        if (Number.isInteger(yearValue)) {
-            label = `${yearValue}周年`;
-        } else {
-            label = `${yearValue}周年`;
-        }
+        const label = `${yearValue}周年`;
 
         const row = document.createElement('tr');
         const isPassed = targetDate < today;
-        if (isPassed) row.classList.add('row-passed');
+
+        if (isPassed) {
+            row.classList.add('row-passed');
+            if (hidePassed) {
+                row.style.display = 'none';
+            } else {
+                visibleCount++;
+            }
+        } else {
+            visibleCount++;
+        }
+
         row.innerHTML = `
             <td><strong>${label}</strong></td>
             <td>${formatDateDisplay(targetDate)}</td>
@@ -256,8 +432,63 @@ function generateHalfYearMilestones(startDate, today, offset) {
             <td>${getStatusBadge(targetDate, today)}</td>
         `;
         tbody.appendChild(row);
+        months += 6;
     }
+
+    milestoneHalfYearState.currentMonths = months - 6;
+
+    // Show load more button
+    const loadMoreBtn = document.getElementById('loadMoreHalfYear');
+    loadMoreBtn.style.display = 'block';
 }
+
+function loadMoreHalfYearMilestones() {
+    const tbody = document.querySelector('#tableHalfYear tbody');
+    const { startDate, today, currentMonths } = milestoneHalfYearState;
+    const hidePassed = document.getElementById('hidePassedBtn').classList.contains('active');
+
+    // Load items until we have 10 visible rows
+    const targetVisibleCount = 10;
+    let visibleCount = 0;
+    let months = currentMonths + 6;
+
+    while (visibleCount < targetVisibleCount) {
+        const targetDate = addMonths(startDate, months);
+        const yearValue = months / 12;
+        const label = `${yearValue}周年`;
+
+        const row = document.createElement('tr');
+        const isPassed = targetDate < today;
+
+        if (isPassed) {
+            row.classList.add('row-passed');
+            if (hidePassed) {
+                row.style.display = 'none';
+            } else {
+                visibleCount++;
+            }
+        } else {
+            visibleCount++;
+        }
+
+        row.innerHTML = `
+            <td><strong>${label}</strong></td>
+            <td>${formatDateDisplay(targetDate)}</td>
+            <td>${getDayOfWeek(targetDate)}</td>
+            <td>${getStatusBadge(targetDate, today)}</td>
+        `;
+        tbody.appendChild(row);
+        months += 6;
+    }
+
+    milestoneHalfYearState.currentMonths = months - 6;
+}
+
+// Global state for birthday milestones infinite scroll
+let birthdayState = {
+    person1: { currentYear: 0, name: '', birthday: null, startDate: null, today: null },
+    person2: { currentYear: 0, name: '', birthday: null, startDate: null, today: null }
+};
 
 function generateBirthdayTable(name1, birthday1, name2, birthday2, today, startDate) {
     // Update sub-tab buttons and titles with names
@@ -268,20 +499,36 @@ function generateBirthdayTable(name1, birthday1, name2, birthday2, today, startD
     document.getElementById('birthday2Title').textContent = `${name2}の誕生日`;
 
     const people = [
-        { name: name1, birthday: birthday1, tableId: 'tableBirthday1', isFemale: false },
-        { name: name2, birthday: birthday2, tableId: 'tableBirthday2', isFemale: true }
+        { name: name1, birthday: birthday1, tableId: 'tableBirthday1', isFemale: false, stateKey: 'person1', loadMoreId: 'loadMoreBirthday1' },
+        { name: name2, birthday: birthday2, tableId: 'tableBirthday2', isFemale: true, stateKey: 'person2', loadMoreId: 'loadMoreBirthday2' }
     ];
 
-    // Generate birthdays from start date year to 10 years in the future
+    const hidePassed = document.getElementById('hidePassedBtn').classList.contains('active');
     const startYear = startDate.getFullYear();
-    const endYear = today.getFullYear() + 10;
 
     people.forEach(person => {
         const tbody = document.querySelector(`#${person.tableId} tbody`);
         tbody.innerHTML = '';
 
-        for (let year = startYear; year <= endYear; year++) {
+        // Store state
+        birthdayState[person.stateKey] = {
+            currentYear: startYear,
+            name: person.name,
+            birthday: person.birthday,
+            startDate: startDate,
+            today: today,
+            isFemale: person.isFemale,
+            tableId: person.tableId
+        };
+
+        // Show items until we have 10 visible rows
+        const targetVisibleCount = 10;
+        let visibleCount = 0;
+        let year = startYear;
+
+        while (visibleCount < targetVisibleCount) {
             const birthdayThisYear = new Date(year, person.birthday.getMonth(), person.birthday.getDate());
+
             // Only include birthdays from start date onwards
             if (birthdayThisYear >= startDate) {
                 const age = year - person.birthday.getFullYear();
@@ -289,7 +536,17 @@ function generateBirthdayTable(name1, birthday1, name2, birthday2, today, startD
                 const isPassed = birthdayThisYear < today;
 
                 const row = document.createElement('tr');
-                if (isPassed) row.classList.add('row-passed');
+
+                if (isPassed) {
+                    row.classList.add('row-passed');
+                    if (hidePassed) {
+                        row.style.display = 'none';
+                    } else {
+                        visibleCount++;
+                    }
+                } else {
+                    visibleCount++;
+                }
 
                 // For female, show 17歳 by default with click to reveal real age
                 let ageCell;
@@ -307,16 +564,24 @@ function generateBirthdayTable(name1, birthday1, name2, birthday2, today, startD
                 `;
                 tbody.appendChild(row);
             }
+            year++;
         }
 
-        // Add header click to toggle all cells at once
-        if (person.isFemale) {
+        birthdayState[person.stateKey].currentYear = year;
 
-            // Add header click to toggle all cells at once
+        // Show load more button
+        const loadMoreBtn = document.getElementById(person.loadMoreId);
+        loadMoreBtn.style.display = 'block';
+
+        // Add header click to toggle all cells at once (for female only)
+        if (person.isFemale) {
             const ageHeader = document.getElementById('birthday2AgeHeader');
-            ageHeader.addEventListener('click', () => {
+            // Remove old listener by cloning
+            const newHeader = ageHeader.cloneNode(true);
+            ageHeader.parentNode.replaceChild(newHeader, ageHeader);
+
+            newHeader.addEventListener('click', () => {
                 const cells = tbody.querySelectorAll('.age-cell');
-                // Check if any are showing fake age, if so show all real
                 const anyShowingFake = Array.from(cells).some(cell => cell.dataset.showingReal === 'false');
 
                 cells.forEach(cell => {
@@ -332,6 +597,56 @@ function generateBirthdayTable(name1, birthday1, name2, birthday2, today, startD
             });
         }
     });
+}
+
+function loadMoreBirthday(personKey) {
+    const state = birthdayState[personKey];
+    const tbody = document.querySelector(`#${state.tableId} tbody`);
+    const hidePassed = document.getElementById('hidePassedBtn').classList.contains('active');
+
+    // Load items until we have 10 visible rows
+    const targetVisibleCount = 10;
+    let visibleCount = 0;
+    let year = state.currentYear;
+
+    while (visibleCount < targetVisibleCount) {
+        const birthdayThisYear = new Date(year, state.birthday.getMonth(), state.birthday.getDate());
+        const age = year - state.birthday.getFullYear();
+        const daysUntil = getDaysDifference(state.today, birthdayThisYear);
+        const isPassed = birthdayThisYear < state.today;
+
+        const row = document.createElement('tr');
+
+        if (isPassed) {
+            row.classList.add('row-passed');
+            if (hidePassed) {
+                row.style.display = 'none';
+            } else {
+                visibleCount++;
+            }
+        } else {
+            visibleCount++;
+        }
+
+        // For female, show 17歳 by default
+        let ageCell;
+        if (state.isFemale) {
+            ageCell = `<td class="age-cell" data-real-age="${age}" data-showing-real="false"><strong>17歳</strong></td>`;
+        } else {
+            ageCell = `<td><strong>${age}歳</strong></td>`;
+        }
+
+        row.innerHTML = `
+            ${ageCell}
+            <td>${formatDateDisplay(birthdayThisYear)}</td>
+            <td>${getDayOfWeek(birthdayThisYear)}</td>
+            <td>${getBirthdayBadge(daysUntil, isPassed)}</td>
+        `;
+        tbody.appendChild(row);
+        year++;
+    }
+
+    state.currentYear = year;
 }
 
 function getBirthdayBadge(daysUntil, isPassed) {

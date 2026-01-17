@@ -636,6 +636,34 @@ body {
     border-bottom: 2px dashed var(--secondary-pink);
 }
 
+/* Load More Button */
+.load-more-btn {
+    display: block;
+    width: 100%;
+    max-width: 300px;
+    margin: 20px auto 0;
+    padding: 12px 25px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--white);
+    background: var(--gradient-romantic);
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    box-shadow: var(--shadow-soft);
+    transition: all 0.3s ease;
+}
+
+.load-more-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+}
+
+.load-more-btn:active {
+    transform: translateY(0);
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
