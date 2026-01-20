@@ -25,7 +25,21 @@
 </head>
 
 <body>
-    <div class="container">
+    <!-- Password Screen -->
+    <div class="password-screen" id="passwordScreen">
+        <div class="password-container">
+            <div class="password-icon"></div>
+            <h1></h1>
+            <p class="password-subtitle">パスワードを入力してください</p>
+            <div class="password-input-group">
+                <input type="password" id="passwordInput" placeholder="パスワード" autocomplete="off">
+                <button class="password-submit-btn" id="passwordSubmitBtn">開く</button>
+            </div>
+            <p class="password-error" id="passwordError"></p>
+        </div>
+    </div>
+
+    <div class="container" id="mainContainer" style="display: none;">
         <!-- Floating hearts decoration -->
         <div class="floating-hearts">
             <span class="heart">💕</span>

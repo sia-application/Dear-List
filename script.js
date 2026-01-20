@@ -4,6 +4,56 @@
 // ===================================
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Password Protection
+    const PASSWORD = '1536'; // パスワードを設定
+    const passwordScreen = document.getElementById('passwordScreen');
+    const mainContainer = document.getElementById('mainContainer');
+    const passwordInput = document.getElementById('passwordInput');
+    const passwordSubmitBtn = document.getElementById('passwordSubmitBtn');
+    const passwordError = document.getElementById('passwordError');
+    const passwordContainer = document.querySelector('.password-container');
+
+    // Check if already authenticated in this session
+    if (sessionStorage.getItem('dearlist_authenticated') === 'true') {
+        passwordScreen.style.display = 'none';
+        mainContainer.style.display = 'block';
+    }
+
+    function verifyPassword() {
+        const enteredPassword = passwordInput.value;
+        if (enteredPassword === PASSWORD) {
+            // Success - show main content
+            sessionStorage.setItem('dearlist_authenticated', 'true');
+            passwordScreen.style.opacity = '1';
+            passwordScreen.style.transition = 'opacity 0.5s ease';
+            passwordScreen.style.opacity = '0';
+            setTimeout(() => {
+                passwordScreen.style.display = 'none';
+                mainContainer.style.display = 'block';
+                mainContainer.style.opacity = '0';
+                mainContainer.style.transition = 'opacity 0.5s ease';
+                setTimeout(() => {
+                    mainContainer.style.opacity = '1';
+                }, 50);
+            }, 500);
+        } else {
+            // Wrong password
+            passwordError.textContent = 'パスワードが違います 💔';
+            passwordContainer.classList.add('shake');
+            passwordInput.value = '';
+            setTimeout(() => {
+                passwordContainer.classList.remove('shake');
+            }, 500);
+        }
+    }
+
+    passwordSubmitBtn.addEventListener('click', verifyPassword);
+    passwordInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            verifyPassword();
+        }
+    });
+
     const calculateBtn = document.getElementById('calculateBtn');
     const resultSection = document.getElementById('resultSection');
 

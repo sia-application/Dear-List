@@ -1041,3 +1041,139 @@ tbody tr:last-child td {
 .table-container:nth-child(4) {
     animation-delay: 0.3s;
 }
+
+/* ===================================
+   Password Screen Styles
+=================================== */
+.password-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--gradient-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.password-container {
+    background: var(--white);
+    border-radius: var(--border-radius-lg);
+    padding: 50px 40px;
+    text-align: center;
+    box-shadow: var(--shadow-medium);
+    max-width: 400px;
+    width: 90%;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.password-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.password-container h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    background: var(--gradient-romantic);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+}
+
+.password-subtitle {
+    font-size: 1rem;
+    color: var(--text-light);
+    margin-bottom: 30px;
+}
+
+.password-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.password-input-group input[type="password"] {
+    font-family: inherit;
+    font-size: 1.1rem;
+    padding: 15px 20px;
+    border: 2px solid var(--secondary-pink);
+    border-radius: 15px;
+    background: var(--light-pink);
+    color: var(--text-dark);
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.password-input-group input[type="password"]:focus {
+    outline: none;
+    border-color: var(--primary-pink);
+    background: var(--white);
+    box-shadow: 0 0 15px rgba(255, 107, 157, 0.3);
+}
+
+.password-input-group input[type="password"]::placeholder {
+    color: #C0C0C0;
+}
+
+.password-submit-btn {
+    font-family: inherit;
+    font-size: 1.1rem;
+    font-weight: 700;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 50px;
+    background: var(--gradient-romantic);
+    color: var(--white);
+    cursor: pointer;
+    box-shadow: var(--shadow-soft);
+    transition: all 0.3s ease;
+}
+
+.password-submit-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-medium);
+}
+
+.password-submit-btn:active {
+    transform: translateY(0);
+}
+
+.password-error {
+    color: #e74c3c;
+    font-size: 0.9rem;
+    margin-top: 15px;
+    min-height: 1.2em;
+}
+
+/* Password screen shake animation for wrong password */
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+        transform: translateX(-5px);
+    }
+
+    20%,
+    40%,
+    60%,
+    80% {
+        transform: translateX(5px);
+    }
+}
+
+.password-container.shake {
+    animation: shake 0.5s ease-in-out;
+}
