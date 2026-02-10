@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dear-list-v1';
+const CACHE_NAME = 'dear-list-v3';
 const urlsToCache = [
     './',
     './index.html',
@@ -39,7 +39,7 @@ self.addEventListener('fetch', (event) => {
                 if (response) {
                     return response;
                 }
-                return fetch(event.request);
+                return fetch(event.request, { cache: 'no-cache' });
             })
     );
 });

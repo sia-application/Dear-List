@@ -237,7 +237,7 @@
         </section>
 
         <footer class="app-footer">
-            <p>Made for kei v1.2.0</p>
+            <p>Made for kei v1.2.1</p>
         </footer>
     </div>
 
@@ -253,6 +253,14 @@
                     .catch((error) => {
                         console.log('ServiceWorker registration failed:', error);
                     });
+
+                let refreshing = false;
+                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    if (!refreshing) {
+                        window.location.reload();
+                        refreshing = true;
+                    }
+                });
             });
         }
     </script>
